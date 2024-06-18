@@ -1,0 +1,298 @@
+---
+title: "Data Programming Project 2024"
+author: "Lucas Lorenzo Jakin"
+data: "2024-06-04"
+output: html_document
+editor: visual
+format: 
+  html: 
+    toc: true
+    toc-location: right
+    embed-resources: true
+bibliography: references.bib
+execute: 
+  echo: true
+  error: true
+  warning: false
+  messaeges: false
+---
+
+# Predicting Secondary School Student Performance (EDA)
+
+## Student Performance Dataset
+
+Education is a key factor for achieving a long-term economic progress. During the last decades, the portuguese educational level has improved. However, the statistics keep Portugal at Europe's tail end due to its *high student failure* and *dropping rates*.
+
+In particular, failure in the core classes of Mathematics and Portuguese (native language) is extremely serious, since they provide fundamental knowledge for the success in other remaining subjects.
+
+The **chosen dataset** (@kaggle_dataset_StudPerformance) contains real-world data from two Portuguese secondary schools. Data was collected using two sources: mark reports, and questionnaires.
+
+------------------------------------------------------------------------
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(skimr)
+library(ggcorrplot)
+library(gt)
+library(ggplot2)
+dataset <- read.csv("student_data.csv", header = T)
+```
+
+Now about the dataframe; The initial version contained scarce information (only the grades and number of absences were available), it was complemented with the latter, which allowed the collection of several demographic, social and school related attributes. The final dataframe consists of 33 columns (attributes), where G3 represents the target variable, the one that we want to predict.
+
+The dataset looks like the following:
+
+```{r}
+  head(dataset)
+  
+```
+
+------------------------------------------------------------------------
+
+> Data Distribution
+
+```{r}
+  skim(dataset)
+```
+
+\
+
+-   In this analysis I used the **skim()** function that provides a neat summary of the dataset, revealing key statistics and characteristics of the data. The dataframe is "partitioned" into two distinct data types: **Numerical** and **String**.
+-   Numerical attributes were examined for statistical measures(mean,median,standard deviation) and gave a description on how are the attributes distributed.
+-   The dataframe does not contain any missing values, which is crucial for the modeling(algorithm) part and making predictions.
+
+------------------------------------------------------------------------
+
+\
+
+> Attributes & their descriptions
+
+```{r}
+library(knitr)
+att <- colnames(dataset)
+description <- c("student's school(binary)","student's sex(binary)" ,"student's age(Num)","home address","family size(binary)" ,"parent's cohabition status(binary)","mother's education(Num)","father's education(Num)","mother's job(nominal)","father's job(nominal)","reason to choose school(nominal)","student's guardian(nominal)","travel time (Num)","weekly study time(Num)","past class failures(Num)","extra school support(binary)","family educational support(binary)","extra paid classes(binary)","extra-curricular activities(binary)","attended nursery school(binary)","wants to take higher education(binary)","internet access(binary)","romantic relationship(binary)","quality of family relationship(Num)","free time(Num)","going out w/ friends(Num)","workday alcohol consumption(Num)","weekend alcohol consumption(Num)","health status(Num)","absences (Num)","first period grade(Num)","second period grade(Num)","final grade(Num)")
+
+table<- data.frame(Attribute = att, Description = description)
+
+
+```
+
+@tbl-attributes listed below shows all the columns that are present inside the data frame combined with their descriptions and data type.
+
+```{r}
+#| label: tbl-attributes
+#| tbl-cap: "The preprocessed student related variables"
+  table %>% gt()
+
+```
+
+------------------------------------------------------------------------
+
+# Exploratary Data Analysis (EDA)
+
+Classification and regression are two important DM goals. Both require a supervised learning, but they are different in terms of the output representation(descrete for classification and continuous for regression). In this work, the Mathematics and Poruguese grades (i.e. G3 of @tbl-attributes) will be modeled using three supervised approches:
+
+-   **Binary** Classification: *pass* if G3 \geq 10, else *fail;*
+
+-   **5-Level** Classification: based on *Erasmus* grade conversion system;
+
+-   **Regression** of the G3 value : Numeric output between 0 and 20.
+
+------------------------------------------------------------------------
+
+Now let's look at key insights and patterns within the dataset. The purpose of this analysis is to understand the underlying patterns, distributions, and relationships within the data and to visualize the data through scatter plots, histograms and other graphical methods. This initial analysis will not only serve the requirements of the course but will also lay the groundwork of my final thesis. The findings will then provide a robust foundation for any subsequent analysis or modeling efforts.
+
+------------------------------------------------------------------------
+
+> Correlations between G1, G2
+
+```{r}
+#| label: fig-g1ng2
+#| fig-cap: "Correlation - G1 & G2"
+  dataset %>% select(G1,G2) %>% 
+    ggplot(.,aes(G1,G2)) +
+    geom_point(color = "darkblue", size = 3) +
+    labs(x = "G1", y = "G2") +
+    geom_smooth(color = "darkblue", method = "lm")
+  
+```
+
+> Correlations between G2 & G3
+
+```{r}
+#| label: fig-g2ng3
+#| fig-cap: "Correlation - G2 & G3"
+  dataset %>% select(G2,G3) %>% 
+    ggplot(.,aes(G2,G3)) +
+    geom_point(color = "red", size = 3) +
+    labs(x = "G2", y = "G3") +
+    geom_smooth(color = "red", method = "lm")
+  
+```
+
+> Correlations between G1 & G3
+
+```{r}
+#| label: fig-g1ng3
+#| fig-cap: "Correlation G1 & G3"
+
+dataset %>% select(G1,G3) %>% 
+  ggplot(.,aes(G1,G3)) +
+  geom_point(color = "darkgreen", size = 3) +
+  labs(x = "G1", y = "G3") +
+  geom_smooth(color = "darkgreen", method = "lm")
+```
+
+-   From the above three plots, we can see that these three attributes are correlated to each other. G1 and G2 represent the grade received from the first period and second school period, respectively. G3 is the target attribute and as we can see from the plots shown above it has a strong correlation with attributes G1 & G2. This occurs because G3 is the final year grade and this actually depends on the grades received from the first and second period.
+
+------------------------------------------------------------------------
+
+Now we'll see how are the relationships between the target attrbite G3 with other attributes.
+
+## Age vs. Grade
+
+### Age Distribution
+
+```{r}
+#| label: fig-ageD
+#| fig-cap: "Age distribution"
+dataset %>% select(age,G3) %>%
+  count(age) %>%
+  ggplot(., aes(age, n)) +
+  geom_col(width = 0.5)+
+  labs(x = "age", y = "Count")+
+  scale_x_continuous(breaks = seq(15,22, by = 1)) +
+  theme_minimal()+
+  geom_smooth(color = "black", span=0.3,se = F)
+
+```
+
+-   @fig-ageD shows the distributions of the age of all students collected from the set of data. Analyzing the plot we can see that the majority of students fall within the range of **15 to 18**.
+
+```{r}
+#| label: tbl-ages
+#| tbl-cap: "Mean grade values for each student's age"
+  dataset %>% group_by(age) %>%
+    summarize(
+      G1_mean = mean(G1),
+      G2_mean = mean(G2),
+      G3_mean = mean(G3)
+    ) %>% kable()
+ 
+```
+
+```{r}
+dataset_long <- dataset %>%  
+  pivot_longer(cols = c(G1,G2,G3), names_to = "grades",
+               values_to = "value")
+```
+
+```{r}
+#| label: fig-ageGs
+#| fig-cap: "Mean of grades for all age distributions"
+  ggplot(dataset_long,aes(age, mean(value), 
+                        fill = as.factor(age))) +
+    geom_col(width = 0.8) +
+    facet_wrap(~grades, scales = "free_y") +
+    labs(x = "Age", y = "Mean", fill = "Age") +
+    scale_x_continuous(breaks = seq(15,22, by = 1)) 
+  
+
+```
+
+-   From @tbl-ages and @fig-ageGs, we can conclude that the older a person is, the lower the grades they receive. However, **twenty-year olds** exhibit an outstanding performance (in this dataset): they **lead by at least 2** whole grade points on a 19-point scale.
+
+\
+
+## Job vs. Grade
+
+> Mother's Job
+
+```{r}
+#| label: tbl-mJob
+#| tbl-cap: "Mean grade values depending on mother's job"
+  dataset %>% group_by(MotherJob = Mjob) %>%
+    summarize(
+      G3 = mean(G3)
+    ) %>% kable()
+```
+
+```{r}
+#| label: fig-mJobBar
+#| fig-cap: "Mean grade values depending on mother's job"
+  dataset %>% select(Mjob,G3) %>%
+    group_by(Mjob) %>% summarize(mG3 = mean(G3)) %>% 
+    ggplot(., aes(Mjob, mG3, fill = as.factor(Mjob))) +
+    geom_bar(width = 0.5, stat = "identity")+
+    labs(title="Job vs. Grade (Mother)",x = "Job", y = "G3", fill = "Mother's job")+
+  theme_minimal()
+```
+
+-   Surprisingly, students with mothers who are **health care professionals** receive a higher grade on average. I personally expected students with mothers who were teachers to score the highest.
+
+> Father's Job
+
+```{r}
+#| label: tbl-fJob
+#| tbl-cap: "Mean grade values depending on father's job"
+  dataset %>% group_by(FatherJob = Fjob) %>%
+    summarize(
+      G3 = mean(G3)
+    ) %>% kable()
+```
+
+```{r}
+#| label: fig-fJob
+#| fig-cap: "Mean grade values depending on father's job"
+  dataset %>% select(Fjob,G3) %>%
+    group_by(Fjob) %>% summarize(mG3 = mean(G3)) %>%
+    ggplot(., aes(Fjob, mG3, fill = as.factor(Fjob))) + 
+    geom_bar(width = 0.5, stat = "identity")+ 
+    labs(title="Job vs. Grade (Father)",x = "Job", y = "G3", fill = "Father's job")+
+  theme_minimal()
+```
+
+-   Fathers with higher education levels tend to increase their children's performance more than fathers with lower education levels. This can be seen by the fact that students with fathers who are **health care professionals** or **teachers** receive a higher grade on average.
+
+-   The father directly passes "forward" his knowledge, thus cultivating the student's knowledge
+
+## Absences vs. Grade
+
+```{r}
+#| label: fig-absG3
+#| fig-cap: "Correlation - absences & G3"
+  dataset %>% select(absences,G3) %>% 
+    ggplot(.,aes(absences,G3)) +
+    geom_point(color = "black", size = 3) +
+    labs(x = "absences", y = "G3") +
+    geom_smooth(color = "black", method = "lm")
+```
+
+-   This low correlation could occur, because absent students "usually" revise the material, effectively accounting for their absence. For a further explanation, we need to plot the **correlation matrix** to validate the hypothesis.
+
+```{r}
+#| label: fig-absences
+#| fig-cap: "Heatmap - absences,G1,G2,G3"
+  dataset %>% select(absences,G1,G2,G3) %>% model.matrix(~0+.,
+              data=.) %>%
+    cor(use="pairwise.complete.obs") %>% 
+    ggcorrplot(show.diag = FALSE, type="full",
+               lab=TRUE,legend.title = "Correlation" ,lab_size
+               = 4,lab_col = "black" ,ggtheme =
+                 ggplot2::theme_gray,
+               colors = c("black","red","white"),
+               outline.color = "black")
+```
+
+-   The number of absences a student has, does not necessarily result in a lower grade overall, as absent student typically make up material they missed, effectively accounting for their absence.
+
+------------------------------------------------------------------------
+
+# Conclusion
+
+Education is a crucial element in our society. The chosen dataset was used to address the prediction of secondary student grades of two core classes (Mathematics and Portuguese) by using past school grades, demographic, social and other school related data. Conducting **Exploratory Data Analysis** is an essential step before implementing machine learning models to predict the target attribute in the dataset. EDA (just some attributes for this project) allowed me to understand the structure, quality and underlying patterns of the data, revealing important information about relationships between the attributes.
+
+The project was made with help of the following article: @datasetArticle
+
+# References

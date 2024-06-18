@@ -1,0 +1,66 @@
+---
+title: "Machine Learning Project 2024"
+author: 
+    - name: "Lucas Jakin"
+    - name: "Saša Nanut"
+    - name: "Luca Marega"
+date: "2024-06-04"
+output: html_document
+editor: visual
+format: 
+  html: 
+    toc: true
+    toc-location: right
+    embed-resources: true
+execute: 
+  echo: true
+  error: true
+  warning: false
+  messaeges: false
+---
+
+# Predicting next-day rain in Australia
+
+#### Introduction
+
+As a group we decided to take on the **first project type**. The project focuses on utilizing DM & ML algorithms to address a specififc problem chosen from Kaggle.The Goal of the project is to address the classification problem by utilizing more than one classification algorithm, in order to do a systematic experimentation with different algorithms to identify in what they differ and which one is the most effective one for the chosen dataset. We will consider different classification algorithms and make the comparison between three of them, more precisely *Artificial Neural Networks*, *CatBoost* and *Logistic Regression*.\
+
+We will divide the work as the following: as a group we will perform a brief analysis of the dataset and make some cleaning of it if needed. Afterwards, each one of us will implement one of the previously mentioned algorithms and then we will compare and interpret the results
+
+## About the dataset
+
+The dataset found in [Kaggle](https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package/code) consists of about 10 years of daily weather observations from numerous locations across Australia.\
+
+The problem that is required to be solved from this dataset represents a classification problem, in this case a **binary classification** problem. The objective is to predict whether it will rain tomorrow or not with high accuracy. The dataframe contains 145460 observations (rows) and 23 attributes. The observations are weather conditions of days of a specific region including: date, location, minimum and maximum temperature, rain fall, humidity and so on.\
+
+The most important feature of the dataset is the last column **"RainTomorrow"**, which is the target variable for our ML models that we want to predict.
+
+It has two values:
+
+-   Yes –\> It will rain tomorrow
+
+-    No –\> It will not rain tomorrow.
+
+
+## Exploratory Data Analysis
+```{r}
+library(tidyverse)
+library(dplyr)
+library(skimr)
+library(ggcorrplot)
+library(gt)
+library(ggplot2)
+weatherAus <- read.csv("weatherAUS.csv", header = T)
+```
+
+As we start, we first load the weather data and look at the first rows to identify the features:
+```{r}
+head(weatherAus) %>% gt()
+```
+
+In the next step we check out the summary statistics of the dataset and identify the numerical and categorical attributes:
+```{r}
+skim(weatherAus)
+```
+
+TABLE OF ATTRIBUTESS!
