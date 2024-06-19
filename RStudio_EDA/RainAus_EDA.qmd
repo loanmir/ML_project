@@ -57,10 +57,47 @@ As we start, we first load the weather data and look at the first rows to identi
 ```{r}
 head(weatherAus) %>% gt()
 ```
-
+\
 In the next step we check out the summary statistics of the dataset and identify the numerical and categorical attributes:
 ```{r}
 skim(weatherAus)
 ```
 
-TABLE OF ATTRIBUTESS!
+As we can see from the figure above, there are 7 **categorical** attributes and 16 **numerical** attributes.\
+Before taking a deeper look on all other attributes, we first did a brief exploration of the target variable:
+
+-    **MISSING VALUES**
+
+```{r}
+missingValues <- sum(is.na(weatherAus$RainTomorrow))
+missingValues
+```
+
+-    **FREQUENCY DISTRIBUTION OF VALUES**
+
+```{r}
+  weatherAus %>% select(RainTomorrow) %>%
+  count(RainTomorrow) %>%
+  ggplot(., aes(RainTomorrow, n, fill=RainTomorrow)) +
+  geom_col(width = 0.5)+
+  labs(x = "RainTomorrow", y = "Count")+
+  theme_minimal()
+```
+
+-    **RATIO OF FREQUENCY DISTRIBUTION**
+
+```{r}
+  weatherAus %>% select(RainTomorrow) %>%
+  count(RainTomorrow) %>%
+  ggplot(., aes(x="", n, fill = RainTomorrow)) +
+  geom_bar(width = 1, size = 1, color = "white",stat = "identity") + coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round((n/145460)*100),"%")),
+            position = position_stack(vjust = 0.5)) +
+  theme_classic() +
+  labs(x = NULL, y = NULL) +
+  theme(axis.line = element_blank())
+```
+
+
+
+
