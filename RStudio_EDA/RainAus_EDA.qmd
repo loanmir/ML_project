@@ -77,7 +77,7 @@ missingValues
 
 ```{r}
   weatherAus %>% select(RainTomorrow) %>%
-  count(RainTomorrow) %>%
+  count(RainTomorrow) %>% drop_na() %>%
   ggplot(., aes(RainTomorrow, n, fill=RainTomorrow)) +
   geom_col(width = 0.5)+
   labs(x = "RainTomorrow", y = "Count")+
@@ -88,7 +88,7 @@ missingValues
 
 ```{r}
   weatherAus %>% select(RainTomorrow) %>%
-  count(RainTomorrow) %>%
+  count(RainTomorrow) %>% drop_na() %>%
   ggplot(., aes(x="", n, fill = RainTomorrow)) +
   geom_bar(width = 1, size = 1, color = "white",stat = "identity") + coord_polar("y", start = 0) +
   geom_text(aes(label = paste0(round((n/145460)*100),"%")),
@@ -97,7 +97,94 @@ missingValues
   labs(x = NULL, y = NULL) +
   theme(axis.line = element_blank())
 ```
+\
+From the plots drawn above, we can clearly see that RainTomorrow has 2 categories of values: **Yes** and **No**. There are far more NEGATIVE values than POSITIVE.
+
+```{r}
+  weatherAus %>% select(RainToday) %>%
+  count(RainToday) %>% drop_na() %>%
+  ggplot(., aes(x="", n, fill = RainToday)) +
+  geom_bar(width = 1, size = 1, color = "white",stat = "identity") + coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round((n/145460)*100),"%")),
+            position = position_stack(vjust = 0.5)) +
+  theme_classic() +
+  labs(x = NULL, y = NULL) +
+  theme(axis.line = element_blank())
+```
+\
+
+The variable **RainToday** has a very similar value distribution as the target variable. ...!!!!!!!!!!!!!!!!!!!!!
+
+***
+
+### Categorical values
+
+All together there are 6 categorical features + a Date column.
+In order to make the information about the date more useful, we decided to extract the year, the month and the day from the date into three separate columns.
+\
+This is done here below:
+```{r}
+weatherAusNew <- weatherAus %>% mutate(
+  Year = year(Date),
+  Month = month(Date),
+  Day = day(Date)
+) %>% select(-Date)
+as_tibble(weatherAusNew)
+```
+
+***
+
+### Numerical values
+
+There are 16 numerical attributes in the raw dataset, after adding three columns for year, month and day, there are in total 19 numerical attributes. The main goal when analyzing numerical data is to find the outliers. Outliers are data information that differ significantly from other observations.
+
+The most efficient way to detect outliers is to draw box plots:
+
+> MinTemp
+
+```{r}
+ boxplot(weatherAusNew$MinTemp, col = "blue", border = "black")
+```
+
+> MaxTemp
+
+> RainFall
+
+> Evaporation
+
+> Sunshine
+
+> WindGustSpeed
+
+> WindSpeed9am
+
+> WindSpeed3pm
+
+> Humidity9am
+
+> Humidity3pm
+
+> Pressure9am
+
+> Pressure3pm
+
+> Cloud9am
+
+> Cloud3pm
+
+> Temp9am
+
+> Temp3pm
+
+> Year
+
+> Month
+
+> Day
 
 
+
+***
+MAYBE SET THE **RAINTOMORROW** VALUES yes/no -> 1/0!!!!! CHECK
 
 
