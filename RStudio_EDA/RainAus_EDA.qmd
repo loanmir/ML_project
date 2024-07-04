@@ -17,7 +17,6 @@ execute:
   error: true
   warning: false
   messaeges: false
-jupyter: python3
 ---
 
 # Predicting next-day rain in Australia
@@ -40,10 +39,10 @@ It has two values:
 
 -   Yes –\> It will rain tomorrow
 
--    No –\> It will not rain tomorrow.
-
+-   No –\> It will not rain tomorrow.
 
 ## Exploratory Data Analysis
+
 ```{r}
 library(tidyverse)
 library(dplyr)
@@ -55,11 +54,14 @@ weatherAus <- read.csv("weatherAUS.csv", header = T)
 ```
 
 As we start, we first load the weather data and look at the first rows to identify the features:
+
 ```{r}
 head(weatherAus) %>% gt()
 ```
+
 \
 In the next step we check out the summary statistics of the dataset and identify the numerical and categorical attributes:
+
 ```{r}
 skim(weatherAus)
 ```
@@ -67,14 +69,14 @@ skim(weatherAus)
 As we can see from the figure above, there are 7 **categorical** attributes and 16 **numerical** attributes.\
 Before taking a deeper look on all other attributes, we first did a brief exploration of the target variable:
 
--    **MISSING VALUES**
+-   **MISSING VALUES**
 
 ```{r}
 missingValues <- sum(is.na(weatherAus$RainTomorrow))
 missingValues
 ```
 
--    **FREQUENCY DISTRIBUTION OF VALUES**
+-   **FREQUENCY DISTRIBUTION OF VALUES**
 
 ```{r}
   weatherAus %>% select(RainTomorrow) %>%
@@ -85,7 +87,7 @@ missingValues
   theme_minimal()
 ```
 
--    **RATIO OF FREQUENCY DISTRIBUTION**
+-   **RATIO OF FREQUENCY DISTRIBUTION**
 
 ```{r}
   weatherAus %>% select(RainTomorrow) %>%
@@ -98,6 +100,7 @@ missingValues
   labs(x = NULL, y = NULL) +
   theme(axis.line = element_blank())
 ```
+
 \
 From the plots drawn above, we can clearly see that RainTomorrow has 2 categories of values: **Yes** and **No**. There are far more NEGATIVE values than POSITIVE.
 
@@ -112,18 +115,18 @@ From the plots drawn above, we can clearly see that RainTomorrow has 2 categorie
   labs(x = NULL, y = NULL) +
   theme(axis.line = element_blank())
 ```
+
 \
 
 The variable **RainToday** has a very similar value distribution as the target variable. ...!!!!!!!!!!!!!!!!!!!!!
 
-***
+------------------------------------------------------------------------
 
 ### Categorical values
 
-All together there are 6 categorical features + a Date column.
-In order to make the information about the date more useful, we decided to extract the year, the month and the day from the date into three separate columns.
-\
+All together there are 6 categorical features + a Date column. In order to make the information about the date more useful, we decided to extract the year, the month and the day from the date into three separate columns.\
 This is done here below:
+
 ```{r}
 weatherAusNew <- weatherAus %>% mutate(
   Year = year(Date),
@@ -133,7 +136,7 @@ weatherAusNew <- weatherAus %>% mutate(
 as_tibble(weatherAusNew)
 ```
 
-***
+------------------------------------------------------------------------
 
 ### Numerical values
 
@@ -255,7 +258,16 @@ The most efficient way to detect outliers is to draw box plots:
  boxplot(weatherAusNew$Day, col = "blue", border = "black")
 ```
 
-After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have outliers as there as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
+#### Outliers
+
+
+After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
+
+Let's remove the outliers values from the dataset:
+
+```{r}
+
+```
 
 
 ### Multicollinearity
@@ -274,62 +286,86 @@ weatherAusNew %>% select(where(is.numeric)) %>% model.matrix(~0+.,
                outline.color = "black")
 ```
 
-***
-MAYBE SET THE **RAINTOMORROW** VALUES yes/no -> 1/0!!!!! CHECK
+------------------------------------------------------------------------
 
-look at function for deleting outliers,
-more  analysis before modeling
+MAYBE SET THE **RAINTOMORROW** VALUES yes/no -\> 1/0!!!!! CHECK
 
+look at function for deleting outliers, more analysis before modeling
 
 ## Modeling
 
 ### Artificial Neural Network
 
-PYTHON WORKSSS
+-   The ANN model derives from Biological neural networks that have the structure of the human brain. It contains neurons(nodes) interconnected to one another in various layers of the network. It consists of three layers: Input layer, Hidden layers (can be several of them) and Output layer. The input layer accepts inputs in several formats, the hidden layer is in-between the inputs and outputs and performs calculations to find hidden features and patterns. The output layer outputs the results of calculations.
+
+-   *ADVANTAGES*
+
+    -   **Parallel processing**
+
+    -   Information can produce **output** even with **inadequate data**
+
+    -   **Success** proportional to **chosen instances**
+
+-   *DISADVANTAGES*
+
+    -   Depends on **hardware**
+
+    -   ANNs work with **numerical data**
+
+    -   Duration of network is **unknown**
+
+-   **FUNCTIONING**
+
+    Each input is multiplied by its corresponding weights (strength of interconnections between neurons). All weighted inputs are summarized inside the computing unit. Each neuron has its **bias,** which is added to the weighted sum to make it non-zero, so the total sum of weighted inputs can be from 0 to plus infinity. The maximum value is **benchmarked** to keep the response in the limits. This is performed in *TRANSFER FUNCTIONS.*
+
+    *ACTIVATION FUNCTIONS* choose whether a node should fire or not. Only those who are *fired* make it to the output layer. Activation functions are distinctive depending on the task that is performed.
+
+-   **FEED-BACK**
+
+    -   Feed-back networks feed information back to itself
+
+-   **FEED-FORWARD**
+
+    -   Assessment of ouputs by reviewing its inputs
+
+    -   Input –\> Neuron layer –\> Output
+
+------------------------------------------------------------------------
 
 ```{python}
-import re
 
-# Function checks if the string
-# contains any special character
-def run(string):
 
-    # Make own character set and pass 
-    # this as argument in compile method
-    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-    
-    # Pass the string in search 
-    # method of regex object.    
-    if(regex.search(string) == None):
-        print("String is accepted")
-        
-    else:
-        print("String is not accepted.")
-    
-
-# Driver Code
-if __name__ == '__main__' :
-    
-    # Enter the string
-    string = "Geeks$For$Geeks"
-    
-    # calling run function 
-    run(string)
+# Python3 code to demonstrate
+# matrix creation of n * n
+# using list comprehension
+ 
+# initializing N
+N = 4
+ 
+# printing dimension
+print("The dimension : " + str(N))
+ 
+# using list comprehension
+# matrix creation of n * n
+res = [list(range(1 + N * i, 1 + N * (i + 1)))
+                            for i in range(N)]
+ 
+# print result
+print("The created matrix of N * N: " + str(res))
 ```
 
+### CatBoost
 
-### CatBoost 
+------------------------------------------------------------------------
 
-```{r}
+```{python}
 
 ```
-
 
 ### Logistic Regression
 
-```{r}
+------------------------------------------------------------------------
+
+```{python}
 
 ```
-
-
-
