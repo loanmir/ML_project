@@ -17,6 +17,7 @@ execute:
   error: true
   warning: false
   messaeges: false
+jupyter: python3
 ---
 
 # Predicting next-day rain in Australia
@@ -148,43 +149,187 @@ The most efficient way to detect outliers is to draw box plots:
 
 > MaxTemp
 
-> RainFall
+```{r}
+ boxplot(weatherAusNew$MaxTemp, col = "blue", border = "black")
+```
+
+> Rainfall
+
+```{r}
+ boxplot(weatherAusNew$Rainfall, col = "blue", border = "black")
+```
 
 > Evaporation
 
+```{r}
+ boxplot(weatherAusNew$Evaporation, col = "blue", border = "black")
+```
+
 > Sunshine
+
+```{r}
+ boxplot(weatherAusNew$Sunshine, col = "blue", border = "black")
+```
 
 > WindGustSpeed
 
+```{r}
+ boxplot(weatherAusNew$WindGustSpeed, col = "blue", border = "black")
+```
+
 > WindSpeed9am
+
+```{r}
+ boxplot(weatherAusNew$WindSpeed9am, col = "blue", border = "black")
+```
 
 > WindSpeed3pm
 
+```{r}
+ boxplot(weatherAusNew$WindSpeed3pm, col = "blue", border = "black")
+```
+
 > Humidity9am
+
+```{r}
+ boxplot(weatherAusNew$Humidity9am, col = "blue", border = "black")
+```
 
 > Humidity3pm
 
+```{r}
+ boxplot(weatherAusNew$Humidity3pm, col = "blue", border = "black")
+```
+
 > Pressure9am
+
+```{r}
+ boxplot(weatherAusNew$Pressure9am, col = "blue", border = "black")
+```
 
 > Pressure3pm
 
+```{r}
+ boxplot(weatherAusNew$Pressure3pm, col = "blue", border = "black")
+```
+
 > Cloud9am
+
+```{r}
+ boxplot(weatherAusNew$Cloud9am, col = "blue", border = "black")
+```
 
 > Cloud3pm
 
+```{r}
+ boxplot(weatherAusNew$Cloud3pm, col = "blue", border = "black")
+```
+
 > Temp9am
+
+```{r}
+ boxplot(weatherAusNew$Temp9am, col = "blue", border = "black")
+```
 
 > Temp3pm
 
+```{r}
+ boxplot(weatherAusNew$Temp3pm, col = "blue", border = "black")
+```
+
 > Year
+
+```{r}
+ boxplot(weatherAusNew$Year, col = "blue", border = "black")
+```
 
 > Month
 
+```{r}
+ boxplot(weatherAusNew$Month, col = "blue", border = "black")
+```
+
 > Day
 
+```{r}
+ boxplot(weatherAusNew$Day, col = "blue", border = "black")
+```
 
+After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have outliers as there as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
+
+
+### Multicollinearity
+
+```{r}
+#| label: fig-absences
+#| fig-cap: "Correlation Heatmap"
+weatherAusNew %>% select(where(is.numeric)) %>% model.matrix(~0+.,
+              data=.) %>%
+    cor(use="pairwise.complete.obs") %>% 
+    ggcorrplot(show.diag = FALSE, type="full",
+               lab=TRUE,legend.title = "Correlation" ,lab_size
+               = 2,lab_col = "black" ,ggtheme =
+                 ggplot2::theme_gray,
+               colors = c("white","green","darkgreen"),
+               outline.color = "black")
+```
 
 ***
 MAYBE SET THE **RAINTOMORROW** VALUES yes/no -> 1/0!!!!! CHECK
+
+look at function for deleting outliers,
+more  analysis before modeling
+
+
+## Modeling
+
+### Artificial Neural Network
+
+PYTHON WORKSSS
+
+```{python}
+import re
+
+# Function checks if the string
+# contains any special character
+def run(string):
+
+    # Make own character set and pass 
+    # this as argument in compile method
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    
+    # Pass the string in search 
+    # method of regex object.    
+    if(regex.search(string) == None):
+        print("String is accepted")
+        
+    else:
+        print("String is not accepted.")
+    
+
+# Driver Code
+if __name__ == '__main__' :
+    
+    # Enter the string
+    string = "Geeks$For$Geeks"
+    
+    # calling run function 
+    run(string)
+```
+
+
+### CatBoost 
+
+```{r}
+
+```
+
+
+### Logistic Regression
+
+```{r}
+
+```
+
 
 
