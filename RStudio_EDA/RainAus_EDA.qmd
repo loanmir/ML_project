@@ -260,7 +260,6 @@ The most efficient way to detect outliers is to draw box plots:
 
 #### Outliers
 
-
 After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
 
 Let's remove the outliers values from the dataset:
@@ -268,7 +267,6 @@ Let's remove the outliers values from the dataset:
 ```{r}
 
 ```
-
 
 ### Multicollinearity
 
@@ -297,6 +295,11 @@ look at function for deleting outliers, more analysis before modeling
 ### Artificial Neural Network
 
 -   The ANN model derives from Biological neural networks that have the structure of the human brain. It contains neurons(nodes) interconnected to one another in various layers of the network. It consists of three layers: Input layer, Hidden layers (can be several of them) and Output layer. The input layer accepts inputs in several formats, the hidden layer is in-between the inputs and outputs and performs calculations to find hidden features and patterns. The output layer outputs the results of calculations.
+
+    ![ANN layers](ANNPicture.png)
+    
+\
+
 
 -   *ADVANTAGES*
 
@@ -356,6 +359,8 @@ print("The created matrix of N * N: " + str(res))
 
 ### CatBoost
 
+-   **Categorical Boosting** is an open-source boosting library designed for use on problems like regression and classification having a very large number of independent features. Ii is a variant of gradient boosting that can handle both categorical and numerical features. It also uses an algorithm called **symmetric weighted quantile sketch (SWQS)** which automatically handles the missing values in the dataset to reduce overfitting and improve the overall performance of the dataset.
+
 ------------------------------------------------------------------------
 
 ```{python}
@@ -364,7 +369,29 @@ print("The created matrix of N * N: " + str(res))
 
 ### Logistic Regression
 
-------------------------------------------------------------------------
+-   **Logistic Regression** is a supervised machine learning algorithm used for classification tasks where the goal is to predict the probability that an instance belongs to a given class or not. This model is used for binary classification where we use the sigmoid function, that takes input as independent variables and produces a probability value between 0 and 1.
+
+-   **Key Concepts:**
+
+    -   Logistic Regression predicts the output of a categorical dependent variable. In our case we have the target variable *"RainTomorrow"* that has values "yes" and "no".
+
+    -   It gives the probabilistic values which is between 0 and 1.
+
+    -   Instead of fitting a regression line, we fit an **S shaped** logistic function, which predicts two maximum values.
+
+        ![Sigmoid Function](LogRegPicture.png)
+        
+\
+
+-   [**Sigmoid function**]{style="color:red;"} is a mathematical function used to map the predicted values to probabilities. It maps any real value into another value within the range of 0 and 1. This range is called the **Threshold value**.
+
+-   **Types of Logistic regression**
+
+    -   [Binomial:]{.underline} there can be only two possible types of dependent variables, such as 0 and 1, Pass or Fail, etc.
+
+    -   [Multinomial:]{.underline} there can be 3 or more possible unordered types of the dependent variable, such as "cat", "dogs", or "sheep".
+
+    -   [Ordinal:]{.underline} there can be 3 or more possible ordered types of dependent variables, such as "low", "medium", "high".
 
 ```{python}
 
