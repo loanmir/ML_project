@@ -297,9 +297,8 @@ look at function for deleting outliers, more analysis before modeling
 -   The ANN model derives from Biological neural networks that have the structure of the human brain. It contains neurons(nodes) interconnected to one another in various layers of the network. It consists of three layers: Input layer, Hidden layers (can be several of them) and Output layer. The input layer accepts inputs in several formats, the hidden layer is in-between the inputs and outputs and performs calculations to find hidden features and patterns. The output layer outputs the results of calculations.
 
     ![ANN layers](ANNPicture.png)
-    
-\
 
+\
 
 -   *ADVANTAGES*
 
@@ -359,7 +358,29 @@ print("The created matrix of N * N: " + str(res))
 
 ### CatBoost
 
--   **Categorical Boosting** is an open-source boosting library designed for use on problems like regression and classification having a very large number of independent features. Ii is a variant of gradient boosting that can handle both categorical and numerical features. It also uses an algorithm called **symmetric weighted quantile sketch (SWQS)** which automatically handles the missing values in the dataset to reduce overfitting and improve the overall performance of the dataset.
+-   Catboost is a machine learning algorithm that excels in classification and regression tasks. As a **gradient boosting** algorithm, it builds an ensemble of decision trees, where each tree corrects the errors of the previous ones. This iterative process enhances the model's accuracy and robustness.
+
+-   **FUNCTIONING**
+
+    Catboost follows the principles of gradient boosting but introduces several unique innovations:
+
+    -   *Initialization:* The algorithm begins with a simple initial model, such as predicting the **mean value** for regression or **uniform probability** for classification.
+
+    -   *Sequential Tree Building:* Decision trees are constructed one by one. Each tree is designed to minimize a specified loss function by addressing the errors from previous trees.
+
+    -   *Model Update:* Newly built tree is added to the model, refining it.
+
+    -   *Iteration:* The process repeats until the stopping criterion is met.
+
+-   **Key Concepts:**
+
+    -   [Gradient Boosting:]{.underline} Ensemble learning technique that combines weak prediction models, typically prediction trees, to form a strong predictive model. It iteratively adds new models to the ensemble.
+
+    -   [Handling Categorical Features:]{.underline} It handles categorical features directly, without requiring extensive preprocessing. Very effective for real-world datasets that contain qualitative data, improving the performance.
+
+    -   Learning Rate: The learning rate in CatBoost controls the step size at which the model learns during boosting. CatBoost automatically selects an optimal learning rate based on the dataset's features, striking a **balance** between **learning speed** and **model accuracy.** This helps achieving better performance with minimal tuning.
+
+    ![Sequential Tree Building approach](CaBoostPicture.jpg)
 
 ------------------------------------------------------------------------
 
@@ -380,7 +401,7 @@ print("The created matrix of N * N: " + str(res))
     -   Instead of fitting a regression line, we fit an **S shaped** logistic function, which predicts two maximum values.
 
         ![Sigmoid Function](LogRegPicture.png)
-        
+
 \
 
 -   [**Sigmoid function**]{style="color:red;"} is a mathematical function used to map the predicted values to probabilities. It maps any real value into another value within the range of 0 and 1. This range is called the **Threshold value**.
