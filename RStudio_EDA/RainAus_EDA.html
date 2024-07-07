@@ -3083,7 +3083,7 @@ vertical-align: -.125em;
 <h1>Predicting next-day rain in Australia</h1>
 <section id="introduction" class="level4">
 <h4 class="anchored" data-anchor-id="introduction">Introduction</h4>
-<p>As a group we decided to take on the <strong>first project type</strong>. The project focuses on utilizing DM &amp; ML algorithms to address a specififc problem chosen from Kaggle.The Goal of the project is to address the classification problem by utilizing more than one classification algorithm, in order to do a systematic experimentation with different algorithms to identify in what they differ and which one is the most effective one for the chosen dataset. We will consider different classification algorithms and make the comparison between three of them, more precisely <em>Artificial Neural Networks</em>, <em>CatBoost</em> and <em>Logistic Regression</em>.<br>
+<p>As a group we decided to take on the <strong>first project type</strong>. The project focuses on utilizing DM &amp; ML algorithms to address a specific problem chosen from Kaggle.The Goal of the project is to address the classification problem by utilizing more than one classification algorithm, in order to do a systematic experimentation with different algorithms to identify in what they differ and which one is the most effective one for the chosen dataset. We will consider different classification algorithms and make the comparison between three of them, more precisely <em>Artificial Neural Networks</em>, <em>CatBoost</em> and <em>Logistic Regression</em>.<br>
 </p>
 <p>We will divide the work as the following: as a group we will perform a brief analysis of the dataset and make some cleaning of it if needed. Afterwards, each one of us will implement one of the previously mentioned algorithms and then we will compare and interpret the results</p>
 </section>
@@ -3109,27 +3109,29 @@ vertical-align: -.125em;
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggcorrplot)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>weatherAus <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;weatherAUS.csv&quot;</span>, <span class="at">header =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#use_python(&quot;C:\\Python312\python.exe&quot;, required = T)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>weatherAus <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;weatherAUS.csv&quot;</span>, <span class="at">header =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As we start, we first load the weather data and look at the first rows to identify the features:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(weatherAus) <span class="sc">%&gt;%</span> <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="yyfgjtfvge" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yyfgjtfvge table {
+<div id="uemeoakutt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uemeoakutt table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#yyfgjtfvge thead, #yyfgjtfvge tbody, #yyfgjtfvge tfoot, #yyfgjtfvge tr, #yyfgjtfvge td, #yyfgjtfvge th {
+#uemeoakutt thead, #uemeoakutt tbody, #uemeoakutt tfoot, #uemeoakutt tr, #uemeoakutt td, #uemeoakutt th {
 border-style: none;
 }
-#yyfgjtfvge p {
+#uemeoakutt p {
 margin: 0;
 padding: 0;
 }
-#yyfgjtfvge .gt_table {
+#uemeoakutt .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -3154,11 +3156,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_caption {
+#uemeoakutt .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#yyfgjtfvge .gt_title {
+#uemeoakutt .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -3169,7 +3171,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#yyfgjtfvge .gt_subtitle {
+#uemeoakutt .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3180,7 +3182,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#yyfgjtfvge .gt_heading {
+#uemeoakutt .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -3191,12 +3193,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_bottom_border {
+#uemeoakutt .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_col_headings {
+#uemeoakutt .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3210,7 +3212,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_col_heading {
+#uemeoakutt .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3229,7 +3231,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#yyfgjtfvge .gt_column_spanner_outer {
+#uemeoakutt .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3240,13 +3242,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#yyfgjtfvge .gt_column_spanner_outer:first-child {
+#uemeoakutt .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#yyfgjtfvge .gt_column_spanner_outer:last-child {
+#uemeoakutt .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#yyfgjtfvge .gt_column_spanner {
+#uemeoakutt .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3257,10 +3259,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#yyfgjtfvge .gt_spanner_row {
+#uemeoakutt .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#yyfgjtfvge .gt_group_heading {
+#uemeoakutt .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3285,7 +3287,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#yyfgjtfvge .gt_empty_group_heading {
+#uemeoakutt .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3299,13 +3301,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#yyfgjtfvge .gt_from_md > :first-child {
+#uemeoakutt .gt_from_md > :first-child {
 margin-top: 0;
 }
-#yyfgjtfvge .gt_from_md > :last-child {
+#uemeoakutt .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#yyfgjtfvge .gt_row {
+#uemeoakutt .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3323,7 +3325,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#yyfgjtfvge .gt_stub {
+#uemeoakutt .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3335,7 +3337,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yyfgjtfvge .gt_stub_row_group {
+#uemeoakutt .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3348,13 +3350,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#yyfgjtfvge .gt_row_group_first td {
+#uemeoakutt .gt_row_group_first td {
 border-top-width: 2px;
 }
-#yyfgjtfvge .gt_row_group_first th {
+#uemeoakutt .gt_row_group_first th {
 border-top-width: 2px;
 }
-#yyfgjtfvge .gt_summary_row {
+#uemeoakutt .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3363,14 +3365,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yyfgjtfvge .gt_first_summary_row {
+#uemeoakutt .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_first_summary_row.thick {
+#uemeoakutt .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#yyfgjtfvge .gt_last_summary_row {
+#uemeoakutt .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3379,7 +3381,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_grand_summary_row {
+#uemeoakutt .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3388,7 +3390,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yyfgjtfvge .gt_first_grand_summary_row {
+#uemeoakutt .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3397,7 +3399,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_last_grand_summary_row_top {
+#uemeoakutt .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3406,10 +3408,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_striped {
+#uemeoakutt .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#yyfgjtfvge .gt_table_body {
+#uemeoakutt .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3417,7 +3419,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_footnotes {
+#uemeoakutt .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3430,7 +3432,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_footnote {
+#uemeoakutt .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3438,7 +3440,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yyfgjtfvge .gt_sourcenotes {
+#uemeoakutt .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3451,57 +3453,57 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#yyfgjtfvge .gt_sourcenote {
+#uemeoakutt .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yyfgjtfvge .gt_left {
+#uemeoakutt .gt_left {
 text-align: left;
 }
-#yyfgjtfvge .gt_center {
+#uemeoakutt .gt_center {
 text-align: center;
 }
-#yyfgjtfvge .gt_right {
+#uemeoakutt .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#yyfgjtfvge .gt_font_normal {
+#uemeoakutt .gt_font_normal {
 font-weight: normal;
 }
-#yyfgjtfvge .gt_font_bold {
+#uemeoakutt .gt_font_bold {
 font-weight: bold;
 }
-#yyfgjtfvge .gt_font_italic {
+#uemeoakutt .gt_font_italic {
 font-style: italic;
 }
-#yyfgjtfvge .gt_super {
+#uemeoakutt .gt_super {
 font-size: 65%;
 }
-#yyfgjtfvge .gt_footnote_marks {
+#uemeoakutt .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#yyfgjtfvge .gt_asterisk {
+#uemeoakutt .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#yyfgjtfvge .gt_indent_1 {
+#uemeoakutt .gt_indent_1 {
 text-indent: 5px;
 }
-#yyfgjtfvge .gt_indent_2 {
+#uemeoakutt .gt_indent_2 {
 text-indent: 10px;
 }
-#yyfgjtfvge .gt_indent_3 {
+#uemeoakutt .gt_indent_3 {
 text-indent: 15px;
 }
-#yyfgjtfvge .gt_indent_4 {
+#uemeoakutt .gt_indent_4 {
 text-indent: 20px;
 }
-#yyfgjtfvge .gt_indent_5 {
+#uemeoakutt .gt_indent_5 {
 text-indent: 25px;
 }
 </style>
@@ -4109,7 +4111,7 @@ Before taking a deeper look on all other attributes, we first did a brief explor
 </div>
 </div>
 <p><br>
-From the plots drawn above, we can clearly see that RainTomorrow has 2 categories of values: <strong>Yes</strong> and <strong>No</strong>. There are far more NEGATIVE values than POSITIVE.</p>
+From the plots drawn above, we can clearly see that RainTomorrow has 2 categories of values: <strong>Yes</strong> and <strong>No</strong>. There are far more NEGATIVE values than POSITIVE.<em>“No”</em> and <em>“Yes”</em> appears 76% of time and 22% of time respectively after deleting all NA values from the attribute.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  weatherAus <span class="sc">%&gt;%</span> <span class="fu">select</span>(RainToday) <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(RainToday) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
@@ -4338,11 +4340,6 @@ This is done here below:</p>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAAAulBMVEUAAAAAADoAAGYAAP8AOjoAOmYAOpAAZrY6AAA6OgA6Ojo6OmY6OpA6ZmY6ZpA6ZrY6kNtmAABmOgBmOjpmZmZmZpBmkJBmkLZmtttmtv+QOgCQOjqQZgCQZjqQkLaQtraQttuQtv+Q2/+2ZgC2Zjq2kGa2kLa2tpC2tra2ttu227a229u22/+2///bkDrbkGbbtmbbtpDbtrbb27bb29vb2//b////tmb/25D/27b/29v//7b//9v///+4/idcAAAACXBIWXMAAB2HAAAdhwGP5fFlAAAdlElEQVR4nO3dbXcc1ZWG4ZYnxoIJBIwSByYE4pdExMZgbJAdWv//b02XZFmyjiGnts9O76Nc14eJ3Stdo+X11J1+U/XmFICQzb5/AIBZCShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgTVDugGYJjxiRp+xIH2/a8N3CzDGzX6gCMl/A8G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gAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgQJKECQgAIECShAkIACBAkoQJCAAgT9P8Tsik0hdRn4AAAAAElFTkSuQmCC" class="img-fluid" width="672"></p>
 </div>
 </div>
-<section id="outliers" class="level4">
-<h4 class="anchored" data-anchor-id="outliers">Outliers</h4>
-<p>After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes <strong>Rainfall</strong>, <strong>Evaporation</strong>, <strong>WindSpeed9am</strong> and <strong>WindSpeed3pm</strong> might have a large number of outliers as there as there’s a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.</p>
-<p>Let’s remove the outliers values from the dataset:</p>
-</section>
 </section>
 <section id="multicollinearity" class="level3">
 <h3 class="anchored" data-anchor-id="multicollinearity">Multicollinearity</h3>
@@ -4355,7 +4352,19 @@ This is done here below:</p>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>               <span class="ot">=</span> <span class="dv">2</span>,<span class="at">lab_col =</span> <span class="st">&quot;black&quot;</span> ,<span class="at">ggtheme =</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                 ggplot2<span class="sc">::</span>theme_gray,</span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">colors =</span> <span class="fu">c</span>(<span class="st">&quot;white&quot;</span>,<span class="st">&quot;green&quot;</span>,<span class="st">&quot;darkgreen&quot;</span>),</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">outline.color =</span> <span class="st">&quot;black&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">outline.color =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(weatherAusNew, <span class="at">file =</span> <span class="st">&quot;weatherNewToPython.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(weatherAusNew)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] &quot;Location&quot;      &quot;MinTemp&quot;       &quot;MaxTemp&quot;       &quot;Rainfall&quot;     
+ [5] &quot;Evaporation&quot;   &quot;Sunshine&quot;      &quot;WindGustDir&quot;   &quot;WindGustSpeed&quot;
+ [9] &quot;WindDir9am&quot;    &quot;WindDir3pm&quot;    &quot;WindSpeed9am&quot;  &quot;WindSpeed3pm&quot; 
+[13] &quot;Humidity9am&quot;   &quot;Humidity3pm&quot;   &quot;Pressure9am&quot;   &quot;Pressure3pm&quot;  
+[17] &quot;Cloud9am&quot;      &quot;Cloud3pm&quot;      &quot;Temp9am&quot;       &quot;Temp3pm&quot;      
+[21] &quot;RainToday&quot;     &quot;RainTomorrow&quot;  &quot;Year&quot;          &quot;Month&quot;        
+[25] &quot;Day&quot;          </code></pre>
+</div>
 <div class="cell-output-display">
 <div id="fig-absences" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -4365,13 +4374,74 @@ This is done here below:</p>
 </div>
 </div>
 </div>
+<section id="outliers" class="level4">
+<h4 class="anchored" data-anchor-id="outliers">Outliers</h4>
+<p>After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes <strong>Rainfall</strong>, <strong>Evaporation</strong>, <strong>WindSpeed9am</strong> and <strong>WindSpeed3pm</strong> might have a large number of outliers as there’s a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.</p>
+<p>Let’s remove the outliers values from the dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> weatherAusNew[,<span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">11</span>,<span class="dv">12</span>)]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#rainfall</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>quartiles1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(data<span class="sc">$</span>Rainfall, <span class="at">probs=</span><span class="fu">c</span>(.<span class="dv">25</span>,.<span class="dv">75</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    IQR <span class="ot">&lt;-</span> <span class="fu">IQR</span>(data<span class="sc">$</span>Rainfall)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in quantile.default(as.numeric(x), c(0.25, 0.75), na.rm = na.rm, : missing values and NaN&#39;s not allowed if &#39;na.rm&#39; is FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>    Lower <span class="ot">&lt;-</span> quartiles[<span class="dv">1</span>] <span class="sc">-</span> <span class="fl">1.5</span><span class="sc">*</span>IQR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object &#39;quartiles&#39; not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>    Upper <span class="ot">&lt;-</span> quartiles[<span class="dv">2</span>] <span class="sc">+</span> <span class="fl">1.5</span><span class="sc">*</span>IQR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object &#39;quartiles&#39; not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>dataNoOut1 <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, data<span class="sc">$</span>Rainfall <span class="sc">&gt;</span> Lower <span class="sc">&amp;</span> data<span class="sc">$</span>Rainfall<span class="sc">&lt;</span> Upper )   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(e, x, parent.frame()): object &#39;Lower&#39; not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">boxplot</span>(dataNoOut1<span class="sc">$</span>Rainfall, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">border =</span> <span class="st">&quot;black&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object &#39;dataNoOut1&#39; not found</code></pre>
+</div>
+</div>
+<p>PYTHON NE DELA EN KURACCC</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SETTING UP PYTHON ON RSTUDIO</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">virtualenv_create</span>(<span class="st">&quot;my-python&quot;</span>, <span class="at">python_version =</span> <span class="st">&quot;3.12&quot;</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">use_virtualenv</span>(<span class="st">&quot;my-python&quot;</span>, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="fu">virtualenv_install</span>(<span class="at">envname =</span> <span class="st">&quot;my-python&quot;</span>, <span class="st">&quot;matplotlib&quot;</span>,<span class="at">ignore_installed =</span> <span class="cn">FALSE</span>, <span class="at">pip_options =</span> <span class="fu">character</span>())</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="fu">virtualenv_install</span>(<span class="at">envname =</span> <span class="st">&quot;my-python&quot;</span>, <span class="st">&quot;numpy&quot;</span>,<span class="at">ignore_installed =</span> <span class="cn">FALSE</span>, <span class="at">pip_options =</span> <span class="fu">character</span>())</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="fu">virtualenv_install</span>(<span class="at">envname =</span> <span class="st">&quot;my-python&quot;</span>, <span class="st">&quot;pandas&quot;</span>,<span class="at">ignore_installed =</span> <span class="cn">FALSE</span>, <span class="at">pip_options =</span> <span class="fu">character</span>())</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="fu">virtualenv_install</span>(<span class="at">envname =</span> <span class="st">&quot;my-python&quot;</span>, <span class="st">&quot;seaborn&quot;</span>,<span class="at">ignore_installed =</span> <span class="cn">FALSE</span>, <span class="at">pip_options =</span> <span class="fu">character</span>())</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="fu">virtualenv_install</span>(<span class="at">envname =</span> <span class="st">&quot;my-python&quot;</span>, <span class="st">&quot;scikit-learn&quot;</span>,<span class="at">ignore_installed =</span> <span class="cn">FALSE</span>, <span class="at">pip_options =</span> <span class="fu">character</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;weatherNewToPython.csv&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <hr>
 <p>MAYBE SET THE <strong>RAINTOMORROW</strong> VALUES yes/no -&gt; 1/0!!!!! CHECK</p>
 <p>look at function for deleting outliers, more analysis before modeling</p>
 </section>
 </section>
+</section>
 <section id="modeling" class="level2">
 <h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
+<p>After performing the Exploratory Data Analysis, we will proceed to the modeling part. In this phase we will implement three models: <strong>Artificial Neural Network</strong>, <strong>Logistic Regression</strong>, and <strong>CatBoost</strong>.</p>
+<p>Till now the analysis was made using code chunks performed in R langauge. For this implementation part the models will be implemented in Python.</p>
 <section id="artificial-neural-network" class="level3">
 <h3 class="anchored" data-anchor-id="artificial-neural-network">Artificial Neural Network</h3>
 <ul>
@@ -4412,31 +4482,6 @@ This is done here below:</p>
 </ul></li>
 </ul>
 <hr>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python3 code to demonstrate</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix creation of n * n</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># using list comprehension</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># initializing N</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">4</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># printing dimension</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The dimension : &quot;</span> <span class="op">+</span> <span class="bu">str</span>(N))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The dimension : 4</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using list comprehension</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix creation of n * n</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> [<span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span> <span class="op">+</span> N <span class="op">*</span> i, <span class="dv">1</span> <span class="op">+</span> N <span class="op">*</span> (i <span class="op">+</span> <span class="dv">1</span>)))</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N)]</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># print result</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The created matrix of N * N: &quot;</span> <span class="op">+</span> <span class="bu">str</span>(res))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The created matrix of N * N: [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]</code></pre>
-</div>
-</div>
 </section>
 <section id="catboost" class="level3">
 <h3 class="anchored" data-anchor-id="catboost">CatBoost</h3>
@@ -4493,6 +4538,112 @@ This is done here below:</p>
 <li><p><u>Ordinal:</u> there can be 3 or more possible ordered types of dependent variables, such as “low”, “medium”, “high”.</p></li>
 </ul></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OneHotEncoder</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dataset</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="co">#file_path = &#39;weatherNewToPython.csv&#39;</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co">#weather_data = pd.read_csv(file_path)</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>weather_data <span class="op">=</span> pd.read_csv(<span class="st">&#39;weatherNewToPython.csv&#39;</span>)</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows and summary information of the dataset</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(weather_data.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Location  MinTemp  MaxTemp  Rainfall  ...  RainTomorrow  Year Month  Day
+0   Albury     13.4     22.9       0.6  ...            No  2008    12    1
+1   Albury      7.4     25.1       0.0  ...            No  2008    12    2
+2   Albury     12.9     25.7       0.0  ...            No  2008    12    3
+3   Albury      9.2     28.0       0.0  ...            No  2008    12    4
+4   Albury     17.5     32.3       1.0  ...            No  2008    12    5
+
+[5 rows x 25 columns]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(weather_data.info())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 145460 entries, 0 to 145459
+Data columns (total 25 columns):
+ #   Column         Non-Null Count   Dtype  
+---  ------         --------------   -----  
+ 0   Location       145460 non-null  object 
+ 1   MinTemp        143975 non-null  float64
+ 2   MaxTemp        144199 non-null  float64
+ 3   Rainfall       142199 non-null  float64
+ 4   Evaporation    82670 non-null   float64
+ 5   Sunshine       75625 non-null   float64
+ 6   WindGustDir    135134 non-null  object 
+ 7   WindGustSpeed  135197 non-null  float64
+ 8   WindDir9am     134894 non-null  object 
+ 9   WindDir3pm     141232 non-null  object 
+ 10  WindSpeed9am   143693 non-null  float64
+ 11  WindSpeed3pm   142398 non-null  float64
+ 12  Humidity9am    142806 non-null  float64
+ 13  Humidity3pm    140953 non-null  float64
+ 14  Pressure9am    130395 non-null  float64
+ 15  Pressure3pm    130432 non-null  float64
+ 16  Cloud9am       89572 non-null   float64
+ 17  Cloud3pm       86102 non-null   float64
+ 18  Temp9am        143693 non-null  float64
+ 19  Temp3pm        141851 non-null  float64
+ 20  RainToday      142199 non-null  object 
+ 21  RainTomorrow   142193 non-null  object 
+ 22  Year           145460 non-null  int64  
+ 23  Month          145460 non-null  int64  
+ 24  Day            145460 non-null  int64  
+dtypes: float64(16), int64(3), object(6)
+memory usage: 27.7+ MB
+None</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define numerical and categorical features</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>num_features <span class="op">=</span> weather_data.select_dtypes(include<span class="op">=</span>[<span class="st">&#39;float64&#39;</span>]).columns.tolist()</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>cat_features <span class="op">=</span> weather_data.select_dtypes(include<span class="op">=</span>[<span class="st">&#39;object&#39;</span>]).columns.tolist()</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate features and target</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> weather_data.drop(columns<span class="op">=</span>[<span class="st">&#39;RainTomorrow&#39;</span>])</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> weather_data[<span class="st">&#39;RainTomorrow&#39;</span>]</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert target variable to binary</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> y.<span class="bu">map</span>({<span class="st">&#39;No&#39;</span>: <span class="dv">0</span>, <span class="st">&#39;Yes&#39;</span>: <span class="dv">1</span>})</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Impute missing values</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>num_imputer <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">&#39;mean&#39;</span>)</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>cat_imputer <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">&#39;most_frequent&#39;</span>)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>X[num_features] <span class="op">=</span> num_imputer.fit_transform(X[num_features])</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>X[cat_features] <span class="op">=</span> cat_imputer.fit_transform(X[cat_features])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>KeyError: &quot;[&#39;RainTomorrow&#39;] not in index&quot;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-hot encode categorical variables</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(X, columns<span class="op">=</span>cat_features, drop_first<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>KeyError: &quot;[&#39;RainTomorrow&#39;] not in index&quot;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into train and test sets</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Train logistic regression model</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ValueError: could not convert string to float: &#39;Albany&#39;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ValueError: could not convert string to float: &#39;MountGambier&#39;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NameError: name &#39;y_pred&#39; is not defined</code></pre>
+</div>
+</div>
 </section>
 </section>
 </section>

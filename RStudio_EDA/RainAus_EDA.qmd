@@ -23,7 +23,7 @@ execute:
 
 #### Introduction
 
-As a group we decided to take on the **first project type**. The project focuses on utilizing DM & ML algorithms to address a specififc problem chosen from Kaggle.The Goal of the project is to address the classification problem by utilizing more than one classification algorithm, in order to do a systematic experimentation with different algorithms to identify in what they differ and which one is the most effective one for the chosen dataset. We will consider different classification algorithms and make the comparison between three of them, more precisely *Artificial Neural Networks*, *CatBoost* and *Logistic Regression*.\
+As a group we decided to take on the **first project type**. The project focuses on utilizing DM & ML algorithms to address a specific problem chosen from Kaggle.The Goal of the project is to address the classification problem by utilizing more than one classification algorithm, in order to do a systematic experimentation with different algorithms to identify in what they differ and which one is the most effective one for the chosen dataset. We will consider different classification algorithms and make the comparison between three of them, more precisely *Artificial Neural Networks*, *CatBoost* and *Logistic Regression*.\
 
 We will divide the work as the following: as a group we will perform a brief analysis of the dataset and make some cleaning of it if needed. Afterwards, each one of us will implement one of the previously mentioned algorithms and then we will compare and interpret the results
 
@@ -50,8 +50,12 @@ library(skimr)
 library(ggcorrplot)
 library(gt)
 library(ggplot2)
+
+#use_python("C:\\Python312\python.exe", required = T)
 weatherAus <- read.csv("weatherAUS.csv", header = T)
 ```
+
+
 
 As we start, we first load the weather data and look at the first rows to identify the features:
 
@@ -102,7 +106,7 @@ missingValues
 ```
 
 \
-From the plots drawn above, we can clearly see that RainTomorrow has 2 categories of values: **Yes** and **No**. There are far more NEGATIVE values than POSITIVE.
+From the plots drawn above, we can clearly see that RainTomorrow has 2 categories of values: **Yes** and **No**. There are far more NEGATIVE values than POSITIVE.*"No"* and *"Yes"* appears 76% of time and 22% of time respectively after deleting all NA values from the attribute.
 
 ```{r}
   weatherAus %>% select(RainToday) %>%
@@ -258,15 +262,6 @@ The most efficient way to detect outliers is to draw box plots:
  boxplot(weatherAusNew$Day, col = "blue", border = "black")
 ```
 
-#### Outliers
-
-After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
-
-Let's remove the outliers values from the dataset:
-
-```{r}
-
-```
 
 ### Multicollinearity
 
@@ -282,7 +277,68 @@ weatherAusNew %>% select(where(is.numeric)) %>% model.matrix(~0+.,
                  ggplot2::theme_gray,
                colors = c("white","green","darkgreen"),
                outline.color = "black")
+
+write.csv(weatherAusNew, file = "weatherNewToPython.csv", row.names = FALSE)
+colnames(weatherAusNew)
 ```
+
+
+#### Outliers
+
+After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
+
+Let's remove the outliers values from the dataset:
+
+```{r}
+data <- weatherAusNew[,c(4,5,11,12)]
+#rainfall
+quartiles1 <- quantile(data$Rainfall, probs=c(.25,.75), na.rm = TRUE)
+    IQR <- IQR(data$Rainfall)
+    
+    Lower <- quartiles[1] - 1.5*IQR
+    Upper <- quartiles[2] + 1.5*IQR
+
+dataNoOut1 <- subset(data, data$Rainfall > Lower & data$Rainfall< Upper )   
+
+ boxplot(dataNoOut1$Rainfall, col = "blue", border = "black")
+
+```
+
+PYTHON NE DELA EN KURACCC
+
+```{r}
+#| output: false
+# SETTING UP PYTHON ON RSTUDIO
+library(reticulate)
+
+virtualenv_create("my-python", python_version = "3.12")
+use_virtualenv("my-python", required = TRUE)
+
+virtualenv_install(envname = "my-python", "matplotlib",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "numpy",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "pandas",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "seaborn",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "scikit-learn",ignore_installed = FALSE, pip_options = character())
+```
+
+
+```{python}
+
+import pandas as pd
+import numpy as np
+ 
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+
+df = pd.read_csv('weatherNewToPython.csv')
+```
+
+
 
 ------------------------------------------------------------------------
 
@@ -291,6 +347,10 @@ MAYBE SET THE **RAINTOMORROW** VALUES yes/no -\> 1/0!!!!! CHECK
 look at function for deleting outliers, more analysis before modeling
 
 ## Modeling
+
+After performing the Exploratory Data Analysis, we will proceed to the modeling part. In this phase we will implement three models: **Artificial Neural Network**, **Logistic Regression**, and **CatBoost**. 
+
+Till now the analysis was made using code chunks performed in R langauge. For this implementation part the models will be implemented in Python.
 
 ### Artificial Neural Network
 
@@ -337,23 +397,6 @@ look at function for deleting outliers, more analysis before modeling
 ```{python}
 
 
-# Python3 code to demonstrate
-# matrix creation of n * n
-# using list comprehension
- 
-# initializing N
-N = 4
- 
-# printing dimension
-print("The dimension : " + str(N))
- 
-# using list comprehension
-# matrix creation of n * n
-res = [list(range(1 + N * i, 1 + N * (i + 1)))
-                            for i in range(N)]
- 
-# print result
-print("The created matrix of N * N: " + str(res))
 ```
 
 ### CatBoost
@@ -415,5 +458,53 @@ print("The created matrix of N * N: " + str(res))
     -   [Ordinal:]{.underline} there can be 3 or more possible ordered types of dependent variables, such as "low", "medium", "high".
 
 ```{python}
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
 
+# Load dataset
+#file_path = 'weatherNewToPython.csv'
+#weather_data = pd.read_csv(file_path)
+weather_data = pd.read_csv('weatherNewToPython.csv')
+
+# Display the first few rows and summary information of the dataset
+print(weather_data.head())
+print(weather_data.info())
+
+# Define numerical and categorical features
+num_features = weather_data.select_dtypes(include=['float64']).columns.tolist()
+cat_features = weather_data.select_dtypes(include=['object']).columns.tolist()
+
+# Separate features and target
+X = weather_data.drop(columns=['RainTomorrow'])
+y = weather_data['RainTomorrow']
+
+# Convert target variable to binary
+y = y.map({'No': 0, 'Yes': 1})
+
+# Impute missing values
+num_imputer = SimpleImputer(strategy='mean')
+cat_imputer = SimpleImputer(strategy='most_frequent')
+
+X[num_features] = num_imputer.fit_transform(X[num_features])
+X[cat_features] = cat_imputer.fit_transform(X[cat_features])
+
+# One-hot encode categorical variables
+X = pd.get_dummies(X, columns=cat_features, drop_first=True)
+
+# Split the dataset into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train logistic regression model
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+print(classification_report(y_test, y_pred))
 ```
