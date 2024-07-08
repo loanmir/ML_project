@@ -55,7 +55,28 @@ library(ggplot2)
 weatherAus <- read.csv("weatherAUS.csv", header = T)
 ```
 
+Setting up python into Rstudio:
 
+```{r}
+#| output: false
+# SETTING UP PYTHON ON RSTUDIO
+library(reticulate)
+
+virtualenv_create("my-python", python_version = "3.12")
+use_virtualenv("my-python", required = TRUE)
+
+virtualenv_install(envname = "my-python", "matplotlib",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "numpy",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "pandas",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "seaborn",ignore_installed = FALSE, pip_options = character())
+
+virtualenv_install(envname = "my-python", "scikit-learn",ignore_installed = FALSE, pip_options = character())
+```
+
+***
 
 As we start, we first load the weather data and look at the first rows to identify the features:
 
@@ -283,48 +304,13 @@ colnames(weatherAusNew)
 ```
 
 
-#### Outliers
+#### Outliers & Missing Values
 
-After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.
+> Outliers
+
+After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average. Before removing the outliers, we are going to split the dataset into **training** and **test** set.
 
 Let's remove the outliers values from the dataset:
-
-```{r}
-data <- weatherAusNew[,c(4,5,11,12)]
-#rainfall
-quartiles1 <- quantile(data$Rainfall, probs=c(.25,.75), na.rm = TRUE)
-    IQR <- IQR(data$Rainfall)
-    
-    Lower <- quartiles[1] - 1.5*IQR
-    Upper <- quartiles[2] + 1.5*IQR
-
-dataNoOut1 <- subset(data, data$Rainfall > Lower & data$Rainfall< Upper )   
-
- boxplot(dataNoOut1$Rainfall, col = "blue", border = "black")
-
-```
-
-PYTHON NE DELA EN KURACCC
-
-```{r}
-#| output: false
-# SETTING UP PYTHON ON RSTUDIO
-library(reticulate)
-
-virtualenv_create("my-python", python_version = "3.12")
-use_virtualenv("my-python", required = TRUE)
-
-virtualenv_install(envname = "my-python", "matplotlib",ignore_installed = FALSE, pip_options = character())
-
-virtualenv_install(envname = "my-python", "numpy",ignore_installed = FALSE, pip_options = character())
-
-virtualenv_install(envname = "my-python", "pandas",ignore_installed = FALSE, pip_options = character())
-
-virtualenv_install(envname = "my-python", "seaborn",ignore_installed = FALSE, pip_options = character())
-
-virtualenv_install(envname = "my-python", "scikit-learn",ignore_installed = FALSE, pip_options = character())
-```
-
 
 ```{python}
 
@@ -333,9 +319,75 @@ import numpy as np
  
 import seaborn as sns
 from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+
 
 
 df = pd.read_csv('weatherNewToPython.csv')
+
+# Separate target variable
+X = df.drop(['RainTomorrow'], axis=1)
+y = df['RainTomorrow'].copy()
+y.shape
+
+#Training and Test Set
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size=0.2,
+                                                    random_state=10)
+print(X_train.shape, y_train.shape)
+
+# Remove outliers
+def cap_max_values(df, var, max_value):
+    return np.where(df[var]>max_value, max_value, df[var])
+
+##removing outliers from both training and testing set
+for df in [X_train, X_test]:
+    df['Rainfall'] = cap_max_values(df, "Rainfall", 3.2)
+    df['Evaporation'] = cap_max_values(df, "Evaporation", 21.8)
+    df['WindSpeed9am'] = cap_max_values(df, "WindSpeed9am", 55.0)
+    df['WindSpeed3pm'] = cap_max_values(df, "WindSpeed3pm", 57.0)
+
+X_train[['Rainfall', 'Evaporation', 'WindSpeed9am', 'WindSpeed3pm']].describe().T
+```
+
+> Missing Values
+
+Addressing missing values is crucial during data preprocessing. Missing values can result from data entry errors, collection issues, and they can degrade performance. Because of this we are going to impute the missing values, or in other words we are going to fill in the missing data:
+
+```{python}
+numerics = ['int64', 'float64']
+cat_vars = ['object']
+
+def print_multiple_value(values: list):
+    for index, value in enumerate(values):
+        print(f"================================================{index + 1}================================================")
+        print("\n".join([
+            str(value),
+            ""
+        ]))
+        
+
+# Numerical & Categorical columns 
+num_cols = list(X_train.select_dtypes(include=numerics).columns)
+cat_cols = list(X_train.select_dtypes(include=cat_vars).columns)
+
+
+# Imputing NUMERICAL
+for df in [X_train, X_test]:
+    for col in num_cols:
+        col_median=X_train[col].median() # usign median to impute
+        df[col].fillna(col_median, inplace=True)
+
+# Imputing CATEGORICAL
+for df in [X_train, X_test]:
+    for col in cat_cols:
+        col_mode=X_train[col].mode()[0]
+        df[col].fillna(col_mode, inplace=True) 
+
+
+# Check missing data
+print_multiple_value([X_train.isnull().sum().T,X_test.isnull().sum().T])
+
 ```
 
 
@@ -481,6 +533,8 @@ cat_features = weather_data.select_dtypes(include=['object']).columns.tolist()
 # Separate features and target
 X = weather_data.drop(columns=['RainTomorrow'])
 y = weather_data['RainTomorrow']
+
+
 
 # Convert target variable to binary
 y = y.map({'No': 0, 'Yes': 1})
