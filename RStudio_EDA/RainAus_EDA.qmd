@@ -65,15 +65,19 @@ library(reticulate)
 virtualenv_create("my-python", python_version = "3.12")
 use_virtualenv("my-python", required = TRUE)
 
-virtualenv_install(envname = "my-python", "matplotlib",ignore_installed = FALSE, pip_options = character())
+#virtualenv_install(envname = "my-python", "matplotlib",ignore_installed = FALSE, pip_options = character())
 
-virtualenv_install(envname = "my-python", "numpy",ignore_installed = FALSE, pip_options = character())
+#virtualenv_install(envname = "my-python", "catboost",ignore_installed = FALSE, pip_options = character())
 
-virtualenv_install(envname = "my-python", "pandas",ignore_installed = FALSE, pip_options = character())
+#virtualenv_install(envname = "my-python", "numpy",ignore_installed = FALSE, pip_options = character())
 
-virtualenv_install(envname = "my-python", "seaborn",ignore_installed = FALSE, pip_options = character())
+#virtualenv_install(envname = "my-python", "pandas",ignore_installed = FALSE, pip_options = character())
 
-virtualenv_install(envname = "my-python", "scikit-learn",ignore_installed = FALSE, pip_options = character())
+#virtualenv_install(envname = "my-python", "seaborn",ignore_installed = FALSE, pip_options = character())
+
+#virtualenv_install(envname = "my-python", "scikit-learn",ignore_installed = FALSE, pip_options = character())
+
+#virtualenv_install(envname = "my-python", "tensorflow",ignore_installed = FALSE, pip_options = character())
 ```
 
 ***
@@ -308,99 +312,23 @@ colnames(weatherAusNew)
 
 > Outliers
 
-After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average. Before removing the outliers, we are going to split the dataset into **training** and **test** set.
+After drawing a boxplot for each numerical attribute in the dataset, we compared the mean of each column with the min/max value and we have noticed that that attributes **Rainfall**, **Evaporation**, **WindSpeed9am** and **WindSpeed3pm** might have a large number of outliers as there's a considerable difference between average value and max value. This also can be seen from their plots, as there is a huge amount of points (values) that differ from the average.  
+Outliers can be identified by using some visualization tools as we have seen above, or also with some statistical methods. Once detected, outliers can be addressed by removing them, transforming the data, or using robust models less sensitive to outliers.
 
-Let's remove the outliers values from the dataset:
+When implementing the models, we will split the dataset into training and testing sets. The training set will be used to train machine learning models, allowing the algorithms to learn from the data. The testing set, on the other hand, will be used to evaluate the models' performance on unseen data, ensuring that the models generalize well and provide accurate predictions in real-world scenarios.
 
-```{python}
-
-import pandas as pd
-import numpy as np
- 
-import seaborn as sns
-from matplotlib import pyplot as plt
-from sklearn.model_selection import train_test_split
-
-
-
-df = pd.read_csv('weatherNewToPython.csv')
-
-# Separate target variable
-X = df.drop(['RainTomorrow'], axis=1)
-y = df['RainTomorrow'].copy()
-y.shape
-
-#Training and Test Set
-X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                    test_size=0.2,
-                                                    random_state=10)
-print(X_train.shape, y_train.shape)
-
-# Remove outliers
-def cap_max_values(df, var, max_value):
-    return np.where(df[var]>max_value, max_value, df[var])
-
-##removing outliers from both training and testing set
-for df in [X_train, X_test]:
-    df['Rainfall'] = cap_max_values(df, "Rainfall", 3.2)
-    df['Evaporation'] = cap_max_values(df, "Evaporation", 21.8)
-    df['WindSpeed9am'] = cap_max_values(df, "WindSpeed9am", 55.0)
-    df['WindSpeed3pm'] = cap_max_values(df, "WindSpeed3pm", 57.0)
-
-X_train[['Rainfall', 'Evaporation', 'WindSpeed9am', 'WindSpeed3pm']].describe().T
-```
 
 > Missing Values
 
-Addressing missing values is crucial during data preprocessing. Missing values can result from data entry errors, collection issues, and they can degrade performance. Because of this we are going to impute the missing values, or in other words we are going to fill in the missing data:
-
-```{python}
-numerics = ['int64', 'float64']
-cat_vars = ['object']
-
-def print_multiple_value(values: list):
-    for index, value in enumerate(values):
-        print(f"================================================{index + 1}================================================")
-        print("\n".join([
-            str(value),
-            ""
-        ]))
-        
-
-# Numerical & Categorical columns 
-num_cols = list(X_train.select_dtypes(include=numerics).columns)
-cat_cols = list(X_train.select_dtypes(include=cat_vars).columns)
-
-
-# Imputing NUMERICAL
-for df in [X_train, X_test]:
-    for col in num_cols:
-        col_median=X_train[col].median() # usign median to impute
-        df[col].fillna(col_median, inplace=True)
-
-# Imputing CATEGORICAL
-for df in [X_train, X_test]:
-    for col in cat_cols:
-        col_mode=X_train[col].mode()[0]
-        df[col].fillna(col_mode, inplace=True) 
-
-
-# Check missing data
-print_multiple_value([X_train.isnull().sum().T,X_test.isnull().sum().T])
-
-```
-
+Addressing missing values is crucial during data preprocessing. Missing values can result from data entry errors, collection issues, and they can degrade performance. Because of this we are going to impute the missing values at each implementation of the three models. **Missing values in categorical columns** will be filled up using the Python function **mode()** that fills in the cells with the most common/occuring element from all other instances. **Missing values in numerical columns** will be filled up with the median value from all the values of the other instances.
 
 
 ------------------------------------------------------------------------
 
-MAYBE SET THE **RAINTOMORROW** VALUES yes/no -\> 1/0!!!!! CHECK
-
-look at function for deleting outliers, more analysis before modeling
 
 ## Modeling
 
-After performing the Exploratory Data Analysis, we will proceed to the modeling part. In this phase we will implement three models: **Artificial Neural Network**, **Logistic Regression**, and **CatBoost**. 
+After performing the Exploratory Data Analysis, we will proceed to the modeling part. In this phase we will implement three models: **Artificial Neural Network**, **CatBoost**, and **Logistic Regression**. 
 
 Till now the analysis was made using code chunks performed in R langauge. For this implementation part the models will be implemented in Python.
 
@@ -447,9 +375,120 @@ Till now the analysis was made using code chunks performed in R langauge. For th
 ------------------------------------------------------------------------
 
 ```{python}
+# ANN IMPLEMENTATIONN
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from catboost import CatBoostClassifier, Pool
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.preprocessing import StandardScaler
+from keras.layers import Dense, BatchNormalization, Dropout
+from keras.models import Sequential
+from keras import callbacks
+from keras.optimizers import Adam
+from sklearn.preprocessing import LabelEncoder, StandardScaler, OneHotEncoder
+
+df = pd.read_csv('weatherNewToPython.csv')
+
+# Categorical columns
+s = (df.dtypes == "object")
+cat_cols = list(s[s].index)
+
+print("Categorial variables")
+print(cat_cols)
+
+for cols in cat_cols:
+    
+    df[cols] = df[cols].fillna(df[cols].mode()[0])
+
+# Numerical columns
+t = (df.dtypes == "float64")
+num_cols = list(t[t].index)
+
+print("Numeric variables:")
+print(num_cols)
+
+for cols in num_cols:
+    
+    df[cols] = df[cols].fillna(df[cols].median())
+df.info()
+df.head(10)
+
+# Categorical columns of type "object" into "float64"
+label_encoder = LabelEncoder()
+for cols in cat_cols: 
+    df[cols] = label_encoder.fit_transform(df[cols])
+
+    
+df.info()
+
+# dropping target and extra columns
+features = df.drop(['RainTomorrow', 'Year','Month', 'Day'], axis=1) 
+target = df['RainTomorrow']
+
+X = features
+y = target
+
+# Splitting test and training sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+
+X.shape
 
 
+#Early stopping
+early_stopping = callbacks.EarlyStopping(
+    min_delta=0.001, # minimium amount of change to count as an improvement
+    patience=20, # how many epochs to wait before stopping
+    restore_best_weights=True,
+)
+
+# Initialising the Neural Network
+model = Sequential()
+
+# Adding layers to the network
+model.add(Dense(units = 32, kernel_initializer = 'uniform', activation = 'relu', input_dim = 21))
+model.add(Dense(units = 32, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dense(units = 16, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dropout(0.25))
+model.add(Dense(units = 8, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dropout(0.5))
+model.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+
+# Compiling the ANN
+opt = Adam(learning_rate=0.001)
+model.compile(optimizer = opt, loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+# Train the ANN
+history = model.fit(X_train, y_train, batch_size = 32, epochs = 150, callbacks=[early_stopping], validation_split=0.2)
+
+
+
+# Plotting the TRAINING & VALIDATION accuracy
+history_df = pd.DataFrame(history.history)
+
+plt.plot(history_df.loc[:, ['accuracy']], "blue", label='Training accuracy')
+plt.plot(history_df.loc[:, ['val_accuracy']], "red", label='Validation accuracy')
+
+plt.title('Training and Validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
+
+# Predicting the test set results
+y_pred = model.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+print(classification_report(y_test, y_pred))
 ```
+
+***
 
 ### CatBoost
 
@@ -480,8 +519,59 @@ Till now the analysis was made using code chunks performed in R langauge. For th
 ------------------------------------------------------------------------
 
 ```{python}
+# Load data
+data = pd.read_csv("weatherAUS.csv")
 
+# Define columns with missing values
+numeric_features = data.select_dtypes(include=['float64', 'int64']).columns
+categorical_features = data.select_dtypes(include=['object']).columns
+
+# Fill missing values
+for col in numeric_features:
+    data[col] = data[col].fillna(data[col].median())
+
+for col in categorical_features:
+    data[col] = data[col].fillna(data[col].mode()[0])
+
+# Prepare features and labels
+X = data.drop(columns=['RainTomorrow'])
+y = data['RainTomorrow']
+
+# Ensure that 'RainTomorrow' is not included in categorical_features
+categorical_features = [col for col in categorical_features if col != 'RainTomorrow']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create CatBoost Pool
+train_pool = Pool(data=X_train, label=y_train, cat_features=categorical_features)
+test_pool = Pool(data=X_test, label=y_test, cat_features=categorical_features)
+
+# Initialize CatBoost model
+model = CatBoostClassifier(iterations=100, depth=6, learning_rate=0.1, loss_function='Logloss', verbose=True)
+
+# Train the model
+model.fit(train_pool)
+
+# Get evaluation results
+evals_result = model.get_evals_result()
+
+# Print the loss at each iteration
+losses = evals_result['learn']['Logloss']
+for i, loss in enumerate(losses):
+    print(f'Iteration {i}: Loss = {loss}')
+
+# Make predictions
+preds = model.predict(test_pool)
+
+# Evaluate the model
+accuracy = (preds == y_test).mean()
+print(f'Accuracy: {accuracy}')
+
+print(classification_report(y_test, preds))
 ```
+
+***
 
 ### Logistic Regression
 
@@ -510,55 +600,67 @@ Till now the analysis was made using code chunks performed in R langauge. For th
     -   [Ordinal:]{.underline} there can be 3 or more possible ordered types of dependent variables, such as "low", "medium", "high".
 
 ```{python}
-import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
+data = pd.read_csv("weatherAUS.csv")
 
-# Load dataset
-#file_path = 'weatherNewToPython.csv'
-#weather_data = pd.read_csv(file_path)
-weather_data = pd.read_csv('weatherNewToPython.csv')
-
-# Display the first few rows and summary information of the dataset
-print(weather_data.head())
-print(weather_data.info())
-
-# Define numerical and categorical features
-num_features = weather_data.select_dtypes(include=['float64']).columns.tolist()
-cat_features = weather_data.select_dtypes(include=['object']).columns.tolist()
-
-# Separate features and target
-X = weather_data.drop(columns=['RainTomorrow'])
-y = weather_data['RainTomorrow']
+# Define numerical and categorical columns
+numerical_cols = ['MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation', 'Sunshine', 'WindGustSpeed', 'WindSpeed9am',
+                  'WindSpeed3pm', 'Humidity9am', 'Humidity3pm', 'Pressure9am', 'Pressure3pm', 'Cloud9am', 'Cloud3pm',
+                  'Temp9am', 'Temp3pm']
+                  
+categorical_cols = ['WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday']
 
 
+# Preprocessing for numerical data: Impute missing values with median and scale
+numerical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
 
-# Convert target variable to binary
-y = y.map({'No': 0, 'Yes': 1})
 
-# Impute missing values
-num_imputer = SimpleImputer(strategy='mean')
-cat_imputer = SimpleImputer(strategy='most_frequent')
+# Preprocessing for categorical data: Impute missing values with mode and one-hot encode
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
 
-X[num_features] = num_imputer.fit_transform(X[num_features])
-X[cat_features] = cat_imputer.fit_transform(X[cat_features])
 
-# One-hot encode categorical variables
-X = pd.get_dummies(X, columns=cat_features, drop_first=True)
+# Bundle preprocessing for numerical and categorical data
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numerical_transformer, numerical_cols),
+        ('cat', categorical_transformer, categorical_cols)
+    ])
 
-# Split the dataset into train and test sets
+# Prepare the data
+X = data.drop(columns=['Date', 'Location', 'RainTomorrow'])
+y = data['RainTomorrow']
+
+# Apply label encoding to the target variable
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(y)
+
+# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Train logistic regression model
-model = LogisticRegression(max_iter=1000)
+# Create and train the logistic regression model
+model = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', LogisticRegression(max_iter=1000))
+])
+
 model.fit(X_train, y_train)
 
 # Make predictions
 y_pred = model.predict(X_test)
 
 # Evaluate the model
-print(classification_report(y_test, y_pred))
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred, zero_division=0)
+
+print("Accuracy:", accuracy)
+print("Confusion Matrix:\n", conf_matrix)
+print("Classification Report:\n", class_report)
+
+
 ```
