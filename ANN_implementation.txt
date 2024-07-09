@@ -1,0 +1,76 @@
+import pandas as pd
+import numpy as np
+
+from keras.layers import Dense, BatchNormalization, Dropout
+from keras.models import Sequential
+from keras import callbacks
+from keras.optimizers import Adam
+ 
+import seaborn as sns
+from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_csv('weatherAus.csv')
+
+# Separate target variable
+X = df.drop(['RainTomorrow'], axis=1)
+#y = df['RainTomorrow'].copy()
+y = df['RainTomorrow']
+y.shape
+
+#Training and Test Set
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size=0.2,
+                                                    random_state=42)
+
+# early stopping of model
+early_stopping = callbacks.EarlyStopping(
+    min_delta=0.001, 
+    patience=10, 
+    restore_best_weights=True,
+)
+
+
+# Initializing the Neural Network here
+model = Sequential()
+
+# Adding layers to the network
+model.add(Dense(units = 32, kernel_initializer = 'uniform', activation = 'relu', input_dim = 22))
+model.add(Dense(units = 32, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dense(units = 16, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dropout(0.25))
+model.add(Dense(units = 16, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dropout(0.25))
+model.add(Dense(units = 8, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dropout(0.5))
+model.add(Dense(units = 8, kernel_initializer = 'uniform', activation = 'relu'))
+model.add(Dropout(0.5))
+model.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+
+# Compiling the ANN
+opt = Adam(learning_rate=0.001)
+model.compile(optimizer = opt, loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+# Training the ANN
+history = model.fit(X_train,y_train, batch_size = 32, epochs = 150, callbacks=[early_stopping], validation_split=0.2)
+
+
+# Plotting Training and Validation accuracy
+history_df = pd.DataFrame(history.history)
+
+plt.plot(history_df.loc[:, ['accuracy']], "#BDE2E2", label='Training accuracy')
+plt.plot(history_df.loc[:, ['val_accuracy']], "#C2C4E2", label='Validation accuracy')
+
+plt.title('Training and Validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
+
+
+# Predicting the test set results
+y_pred = model.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+print(classification_report(y_test, y_pred))
