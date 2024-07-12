@@ -4,7 +4,7 @@ author:
     - name: "Lucas Jakin"
     - name: "Saša Nanut"
     - name: "Luca Marega"
-date: "2024-06-04"
+date: "2024-07-12"
 output: html_document
 editor: visual
 format: 
@@ -375,6 +375,8 @@ Till now the analysis was made using code chunks performed in R langauge. For th
 ------------------------------------------------------------------------
 
 ```{python}
+
+
 # ANN IMPLEMENTATIONN
 import pandas as pd
 import numpy as np
@@ -467,8 +469,10 @@ model.compile(optimizer = opt, loss = 'binary_crossentropy', metrics = ['accurac
 # Train the ANN
 history = model.fit(X_train, y_train, batch_size = 32, epochs = 150, callbacks=[early_stopping], validation_split=0.2)
 
+```
 
 
+```{python}
 # Plotting the TRAINING & VALIDATION accuracy
 history_df = pd.DataFrame(history.history)
 
@@ -480,11 +484,18 @@ plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.legend()
 plt.show()
+```
+
+```{python}
 
 # Predicting the test set results
 y_pred = model.predict(X_test)
-y_pred = (y_pred > 0.5)
+```
 
+```{python}
+y_pred = (y_pred > 0.5)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
 print(classification_report(y_test, y_pred))
 ```
 
@@ -519,6 +530,7 @@ print(classification_report(y_test, y_pred))
 ------------------------------------------------------------------------
 
 ```{python}
+
 # Load data
 data = pd.read_csv("weatherAUS.csv")
 
@@ -560,7 +572,9 @@ evals_result = model.get_evals_result()
 losses = evals_result['learn']['Logloss']
 for i, loss in enumerate(losses):
     print(f'Iteration {i}: Loss = {loss}')
+```
 
+```{python}
 # Make predictions
 preds = model.predict(test_pool)
 
@@ -600,6 +614,7 @@ print(classification_report(y_test, preds))
     -   [Ordinal:]{.underline} there can be 3 or more possible ordered types of dependent variables, such as "low", "medium", "high".
 
 ```{python}
+
 data = pd.read_csv("weatherAUS.csv")
 
 # Define numerical and categorical columns
@@ -649,7 +664,9 @@ model = Pipeline(steps=[
 ])
 
 model.fit(X_train, y_train)
+```
 
+```{python}
 # Make predictions
 y_pred = model.predict(X_test)
 
@@ -661,6 +678,17 @@ class_report = classification_report(y_test, y_pred, zero_division=0)
 print("Accuracy:", accuracy)
 print("Confusion Matrix:\n", conf_matrix)
 print("Classification Report:\n", class_report)
-
-
 ```
+
+
+## Conclusion
+
+In our machine learning project we aimed at predicting next-day rain, implementing three distinct models: Artificial Neural Networks (ANN), CatBoost, and Logistic Regression. Each model was assessed based on its accuracy in predicting the binary target variable *RainTomorrow*. The results of our evaluations revealed that CatBoost achieved the highest accuracy at 0.85, that can be attributed to its advanced gradient boosting algorithm, which is particularly effective in handling categorical features and capturing complex interactions within the data. CatBoost's ability to automatically handle categorical variables contributed to its slightly higher accuracy.
+
+At second place we got ANN with an accuracy of 0.84. The strength of ANN lies in its ability to model non-linear relationships through multiple layers of interconnected neurons, but it typically requires more tuning and computational resources, which could explain why it performed slightly less than CatBoost.
+
+Logistic Regression, while the simplest of the three models, achieved an accuracy of 0.82. This model may have performed worse than the other two models, because of its linear nature, which may not fully captured the complexities of the data as effectively. Logistic Regression remains a valuable model due to its simplicity and lower computational cost.
+
+
+
+
