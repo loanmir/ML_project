@@ -147,7 +147,7 @@ From the plots drawn above, we can clearly see that RainTomorrow has 2 categorie
 
 \
 
-The variable **RainToday** has a very similar value distribution as the target variable. ...!!!!!!!!!!!!!!!!!!!!!
+The variable **RainToday** has a very similar value distribution as the target variable.
 
 ------------------------------------------------------------------------
 
